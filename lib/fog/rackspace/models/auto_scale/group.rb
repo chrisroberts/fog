@@ -2,11 +2,13 @@ require 'fog/core/model'
 require 'fog/rackspace/models/auto_scale/group_config'
 require 'fog/rackspace/models/auto_scale/launch_config'
 require 'fog/rackspace/models/auto_scale/policies'
+require 'fog/rackspace/models/auto_scale/instances'
 
 module Fog
   module Rackspace
     class AutoScale
       class Group < Fog::Model
+
         # @!attribute [r] id
         # @return [String] The autoscale group's id
         identity :id
@@ -14,6 +16,14 @@ module Fog
         # @!attribute [r] links
         # @return [Array] group links.
         attribute :links
+
+        def name
+          group_config.name
+        end
+
+        def instances
+          Fog::Rackspace::AutoScale::Instances.new(:auto_scale_group => self)
+        end
 
         # Gets the group configuration for this autoscale group. The configuration describes the
         # minimum number of entities in the group, the maximum number of entities in the group,
